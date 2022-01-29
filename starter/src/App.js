@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-export default function App() {
+export default function App() 
 	const questions = [
 		{
 			questionText: 'What is the capital of France?',
@@ -9,6 +9,7 @@ export default function App() {
 				{ answerText: 'London', isCorrect: false },
 				{ answerText: 'Paris', isCorrect: true },
 				{ answerText: 'Dublin', isCorrect: false },
+				{ answerText: 'Sydney', isCorrect: false },
 			],
 		},
 		{
@@ -40,25 +41,45 @@ export default function App() {
 		},
 	];
 
+	const [currentQuestion, setCurrentQuestion] = useState(0);
+
+	const [showScore, setShowScore] = useState(false);
+
+	const [score, setScore] = useState(0);
+
+	const handleAnswerButtonClick = (isCorrect) => {
+		if(isCorrect===true){
+			alert("This answer is correct!");
+			setScore(score +1);
+		}
+
+	const handleAnswerButtonClick = () => {
+		const nextQuestion = currentQuestion + 1;
+		if(nextQuestion < questions.length){
+			setCurrentQuestion(nextQuestion);
+		} else {
+			setShowScore(true);
+		}
+		
+	};
+
 	return (
 		<div className='app'>
 			{/* HINT: replace "false" with logic to display the 
       score when the user has answered all the questions */}
-			{false ? (
-				<div className='score-section'>You scored 1 out of {questions.length}</div>
+			{showScore ? (
+				<div className='score-section'>You scored {score} out of {questions.length}</div>
 			) : (
 				<>
 					<div className='question-section'>
 						<div className='question-count'>
-							<span>Question 1</span>/{questions.length}
+							<span>Question {currentQuestion +1}</span>/{questions.length}
 						</div>
-						<div className='question-text'>This is where the question text should go</div>
+						<div className='question-text'>{questions[0].questionText}</div>
 					</div>
 					<div className='answer-section'>
-						<button>Answer 1</button>
-						<button>Answer 2</button>
-						<button>Answer 3</button>
-						<button>Answer 4</button>
+						{questions[0].answerOptions.map((answerOption)=> (
+						<button onClick={() => handleAnswerButtonClick(answerOption.isCorrect)}>{answerOption.answerText}</button>))}
 					</div>
 				</>
 			)}
